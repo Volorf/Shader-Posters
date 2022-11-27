@@ -61,7 +61,8 @@ Shader "Volorf/Shader Posters/000 Dots"
 
             float getRandomFloat(int ind)
             {
-                return frac(sin(sqrt(ind)) * _RandomSeed);
+                ind = ind * ind;
+                return frac(sin(ind) * _RandomSeed);
             }
 
             float getRandomAnimatedFloat(int ind)
