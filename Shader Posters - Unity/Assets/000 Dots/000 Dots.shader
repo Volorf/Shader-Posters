@@ -1,18 +1,23 @@
-Shader "Unlit/000 Dots"
+Shader "Volorf/Shader Posters/000 Dots"
 {
     Properties
     {
+        [Header(Colors)]
         _MainColor("Main Color", Color) = (1, 0, 0, 1)
         _BackgroundColor("Background Color", Color) = (1, 1, 0, 1)
+        
+        [Header(Dot)]
         _EdgeSmoothness("Edge Smoothness", Float) = 0.01
-        _Radius("Radius", Range (0.01, 0.5)) = 0.25
-        _Density("Density", Int) = 10
-        _RandomMultiplier("Random Multiplier", Float) = 10000.0
+        _MinRadius("Min Radius", Range (0.0, 0.5)) = 0.05
+        _MaxRadius("Max Radius", Range (0.01, 0.5)) = 0.25
+        
+        [Header(Layout)]
+        _GridDensity("Grid Density", Int) = 10
+        _RandomSeed("Random Seed", Float) = 10000.0
     }
     SubShader
     {
         Tags { "RenderType"="Opaque" }
-        LOD 100
 
         Pass
         {
@@ -37,26 +42,32 @@ Shader "Unlit/000 Dots"
             float4 _MainColor;
             float4 _BackgroundColor;
             float _EdgeSmoothness;
-            float _Radius;
-            int _Density;
-            float _RandomMultiplier;
+            float _MinRadius;
+            float _MaxRadius;
+            int _GridDensity;
+            float _RandomSeed;
 
             float circle(float2 pos, float rad)
             {
                 float c = length(pos - float2(0.5, 0.5));
                 float s = smoothstep(c - _EdgeSmoothness, c + _EdgeSmoothness, rad);
-                // float s = step(rad, c);
                 return s;
             }
 
             int getIndex(float2 mPos)
             {
-                return floor(mPos.x) + floor(mPos.y) + _Density * floor(mPos.x); 
+                return floor(mPos.x) + floor(mPos.y) + _GridDensity * floor(mPos.x); 
             }
 
             float getRandomFloat(int ind)
             {
-                return frac(sin(ind) * _RandomMultiplier);
+                return frac(sin(sqrt(ind)) * _RandomSeed);
+            }
+
+            float getRandomAnimatedFloat(int ind)
+            {
+                float pInd = pow(ind, 2);
+                return (sin(pInd * _RandomSeed + _Time.z) + 1) / 2.0;
             }
 
             v2f vert (appdata v)
@@ -69,10 +80,10 @@ Shader "Unlit/000 Dots"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                float2 mUV = i.uv * _Density;
+                float2 mUV = i.uv * _GridDensity;
                 float2 fUV = frac(mUV);
-                float colFac = circle(fUV, _Radius * getRandomFloat(getIndex(mUV)));
-                float4 fCol = lerp(_MainColor, _BackgroundColor, colFac);
+                float colFac = circle(fUV, (_MaxRadius - _MinRadius) * getRandomAnimatedFloat(getIndex(mUV)) + _MinRadius);
+                float4 fCol = lerp(_BackgroundColor, _MainColor, colFac);
                 return fCol;
             }
             ENDCG
