@@ -54,6 +54,11 @@ Shader "Volorf/Shader Posters/000 Dots"
                 return s;
             }
 
+            float2x2 scaleMatrix(float2 s)
+            {
+                return float2x2(s.x, 0.0, 0.0, s.y);
+            }
+
             int getIndex(float2 mPos)
             {
                 return floor(mPos.x) + floor(mPos.y) + _GridDensity * floor(mPos.x); 
@@ -81,6 +86,10 @@ Shader "Volorf/Shader Posters/000 Dots"
 
             fixed4 frag (v2f i) : SV_Target
             {
+                // float2 scaledUV = mul(scaleMatrix(float2(, 2)), i.uv);
+                // float v = 0.5;
+                // i.uv.x = smoothstep(i.uv.x + v, i.uv.x - v, 0.5);
+                // i.uv.y = smoothstep(i.uv.y + v, i.uv.y - v, 0.5);
                 float2 mUV = i.uv * _GridDensity;
                 float2 fUV = frac(mUV);
                 float colFac = circle(fUV, (_MaxRadius - _MinRadius) * getRandomAnimatedFloat(getIndex(mUV)) + _MinRadius);
