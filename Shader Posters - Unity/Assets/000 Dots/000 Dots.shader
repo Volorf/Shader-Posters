@@ -6,10 +6,11 @@ Shader "Volorf/Shader Posters/000 Dots"
         _MainColor("Main Color", Color) = (1, 0, 0, 1)
         _BackgroundColor("Background Color", Color) = (1, 1, 0, 1)
         
-        [Header(Dot)]
+        [Header(Dots)]
         _EdgeSmoothness("Edge Smoothness", Float) = 0.01
         _MinRadius("Min Radius", Range (0.0, 0.5)) = 0.05
         _MaxRadius("Max Radius", Range (0.01, 0.5)) = 0.25
+        _Speed("Animation Speed", Float) = 1
         
         [Header(Layout)]
         _GridDensity("Grid Density", Int) = 10
@@ -46,6 +47,7 @@ Shader "Volorf/Shader Posters/000 Dots"
             float _MaxRadius;
             int _GridDensity;
             float _RandomSeed;
+            float _Speed;
 
             float circle(float2 pos, float rad)
             {
@@ -70,10 +72,14 @@ Shader "Volorf/Shader Posters/000 Dots"
                 return frac(sin(ind) * _RandomSeed);
             }
 
-            float getRandomAnimatedFloat(int ind)
+            float getRandomNum(float2 pos)
             {
-                float pInd = pow(ind, 2);
-                return (sin(pInd * _RandomSeed + _Time.z) + 1) / 2.0;
+                return frac(sin(dot(pos, float2(12.9898, 78.233))) * 43758.5453123);
+            }
+
+            float getRandomAnimatedFloat(float2 pos)
+            {
+                return (sin(getRandomNum(pos) * _RandomSeed + _Time.z * _Speed) + 1) / 2.0;
             }
 
             v2f vert (appdata v)

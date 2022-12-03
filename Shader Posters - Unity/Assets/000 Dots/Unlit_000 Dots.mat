@@ -28,13 +28,14 @@ Material:
     m_Floats:
     - _Density: 12
     - _EdgeSmoothness: 0.0025
-    - _GridDensity: 6
-    - _MaxRadius: 0.15
-    - _MinRadius: 0.005
+    - _GridDensity: 4
+    - _MaxRadius: 0.25
+    - _MinRadius: 0
     - _Radius: 0.5
     - _RandomMultiplier: 919.5
-    - _RandomSeed: 2
+    - _RandomSeed: 100
+    - _Speed: 0.5
     m_Colors:
-    - _BackgroundColor: {r: 1, g: 1, b: 1, a: 1}
-    - _MainColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    - _BackgroundColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    - _MainColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
   m_BuildTextureStacks: []
