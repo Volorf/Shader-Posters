@@ -92,10 +92,6 @@ Shader "Volorf/Shader Posters/000 Dots"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // float2 scaledUV = mul(scaleMatrix(float2(, 2)), i.uv);
-                // float v = 0.5;
-                // i.uv.x = smoothstep(i.uv.x + v, i.uv.x - v, 0.5);
-                // i.uv.y = smoothstep(i.uv.y + v, i.uv.y - v, 0.5);
                 float2 mUV = i.uv * _GridDensity;
                 float2 fUV = frac(mUV);
                 float colFac = circle(fUV, (_MaxRadius - _MinRadius) * getRandomAnimatedFloat(getIndex(mUV)) + _MinRadius);
